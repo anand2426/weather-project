@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Page</title>
+    <style>
+       
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+                margin: 0;
+                padding: 0;
+            }
+    
+            header {
+                background-color: #333;
+                color: #fff;
+                padding: 10px;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+    
+            form {
+                display: flex;
+                justify-content: flex-end;
+                margin-top: 10px;
+            }
+    
+            input[type="text"] {
+                padding: 8px;
+                margin-right: 10px;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+            }
+    
+            input[type="submit"] {
+                padding: 8px 12px;
+                background-color: #333;
+                color: #fff;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+    
+            input[type="submit"]:hover {
+                background-color: #555;
+            }
+    
+            .container {
+                max-width: 800px;
+                margin: 20px auto;
+                background-color: #fff;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+    
+            /* New style for weather icon */
+            .weather-icon {
+                width: 50px;
+                height: 50px;
+                margin-right: 10px;
+            }
+        </style>
+
+
+</head>
+<body>
+    <header>
+        <h1>Weather Information</h1>
+    </header>
+
+    <div class="container">
+        <form action="/users " method="post">
+            <input type="hidden" name="user_email" value="{{ users.email if user else '' }}">
+
+            <label for="city">Enter City:</label>
+            <input type="text" name="city" id="city" required>
+            <input type="submit" value="Get Weather">
+        </form>
+
+        {% if user %}
+            <h2>User Information</h2>
+            <p>Name: {{ user.name }}</p>
+            <p>Email: {{ user.email }}</p>
+        {% endif %}
+
+        {% if weather_info %}
+            <h2>{{ weather_info.city }} Weather</h2>
+
+            {% if 'clear' in weather_info.description.lower() %}
+                <img src="{{ url_for('static', filename='images/sun.png') }}" alt="Clear Sky" class="weather-icon">
+            {% elif 'clouds' in weather_info.description.lower() %}
+                <img src="{{ url_for('static', filename='images/clouds.png') }}" alt="Cloudy" class="weather-icon">
+            {% elif 'rain' in weather_info.description.lower() %}
+                <img src="{{ url_for('static', filename='images/rain.png') }}" alt="Rainy" class="weather-icon">
+            {% else %}
+                <img src="{{ url_for('static', filename='images/default.png') }}" alt="Weather Icon" class="weather-icon">
+            {% endif %}
+
+            <p>Temperature: {{ weather_info.temperature }}°C</p>
+            <p>Description: {{ weather_info.description }}</p>
+        {% endif %}
+    </div>
+
+    <a href="/logout" class="logout-link">Log Out</a>
+</body>
+</html>
